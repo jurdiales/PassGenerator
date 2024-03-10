@@ -78,20 +78,17 @@ ApplicationWindow {
                 scale: 1
                 opacity: 1
                 anchors.fill: parent
-                property int index: 1
-
-                function getIdx() {
-                    if (img1.index == 0) { img1.index = 1; }
-                    else { img1.index = 0; }
-                }
 
                 SequentialAnimation {
                     id: pipofade
                     running: false
-                    // loops: Animation.Infinite
-                    onFinished: { img1.getIdx(); pipofade.start(); }
+                    loops: Animation.Infinite
+                    onStopped: { img1.source = imageFrame.imageSources[0]; img1.opacity = 1 }
                     NumberAnimation { target: img1; property: "opacity"; to: 0; duration: 2500 }
-                    PropertyAction { target: img1; property: "source"; value: imageFrame.imageSources[img1.index] }
+                    PropertyAction { target: img1; property: "source"; value: imageFrame.imageSources[1] }
+                    NumberAnimation { target: img1; property: "opacity"; to: 1; duration: 2500 }
+                    NumberAnimation { target: img1; property: "opacity"; to: 0; duration: 2500 }
+                    PropertyAction { target: img1; property: "source"; value: imageFrame.imageSources[0] }
                     NumberAnimation { target: img1; property: "opacity"; to: 1; duration: 2500 }
                 }
             }
