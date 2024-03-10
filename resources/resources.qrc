@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/imports">
+        <file>AutoClosePopup.qml</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="favicon">favicon.svg</file>
+        <file alias="warning">warning.svg</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>data.dat</file>
+        <file>egg.dat</file>
+        <file>egg2.dat</file>
+    </qresource>
+</RCC>
