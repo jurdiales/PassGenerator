@@ -80,6 +80,7 @@ ApplicationWindow {
                 scale: 1
                 opacity: 1
                 anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
 
                 SequentialAnimation {
                     id: pipofade
