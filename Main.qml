@@ -139,8 +139,28 @@ ApplicationWindow {
                 from: 4
                 value: 8
                 to: 32
+                stepSize: 1
                 font.pointSize: 12
                 editable: true
+                width: 180
+
+                // mousearea to increase or decrese value
+                MouseArea {
+                    anchors.fill: lengthInput.contentItem
+                    propagateComposedEvents: true
+                    onClicked: (mouse) => {
+                        mouse.accepted = false
+                    }
+                    onWheel: (wheel) => {
+                                 // console.log(wheel.angleDelta)
+                                 if (wheel.angleDelta.y > 0) {
+                                     lengthInput.increase()
+                                 } else {
+                                     lengthInput.decrease()
+                                 }
+                                 wheel.accepted = true
+                             }
+                }
             }
         }
 
