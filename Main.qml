@@ -231,6 +231,12 @@ ApplicationWindow {
             Layout.fillWidth: true
             horizontalAlignment: TextInput.AlignHCenter
             onTextEdited: generator.onTextEdited(text)
+            // onEnterPressed does not work
+            Keys.onReturnPressed: generator.generatePassword(lengthInput.value)
+            validator: RegularExpressionValidator {
+                // any ASCII printable character (from space to tilde)
+                regularExpression: /[ -~]*/
+            }
         }
 
         GridLayout {
