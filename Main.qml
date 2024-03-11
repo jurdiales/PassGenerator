@@ -10,8 +10,10 @@ import "./resources"
 
 ApplicationWindow {
     id: mainwindow
-    width: 400
-    height: 480
+    minimumWidth: 400
+    minimumHeight: 480
+    maximumWidth: minimumWidth
+    maximumHeight: minimumHeight
     visible: true
     title: qsTr("Password Generator")
 
