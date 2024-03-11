@@ -124,11 +124,11 @@ ApplicationWindow {
 
         Row {
             spacing: 12
-            Layout.alignment: Qt.AlignHCenter
+            Layout.alignment: Qt.AlignRight
 
             Text {
                 id: lengthTxt
-                text: "Length:"
+                text: "Password length:"
                 font.pointSize: 12
                 font.weight: Font.Medium
                 color: Material.secondaryTextColor
