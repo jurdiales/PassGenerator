@@ -27,26 +27,26 @@ void Connector::setPasswordText(QString password)
     }
 }
 
-void Connector::setEntropyBar(int entropy)
+void Connector::setEntropyBar(double entropy)
 {
     // minimum: 4 numbers -> 14 bits
     // maximum: 32 combination of 4 options -> 205 bits
     // each bar has 0 - 100 range -> [14, 205] -> [0, 300]
     // weak: [0-35] medium: [36-64] strong: [65-128]
     if (entropy <= 35) {
-        int value = static_cast<int>(entropy / 35.0 * 100.0);
+        double value = entropy / 35.0 * 100.0;
         weakProgressBar->setProperty("value", QVariant(value));
         mediumProgressBar->setProperty("value", QVariant(0));
         strongProgressBar->setProperty("value", QVariant(0));
         generator->opt.entropy = Generator::WEAK;
     } else if (entropy <= 64) {
-        int value = static_cast<int>((entropy - 36) / (64.0 - 36.0) * 100.0);
+        double value = ((entropy - 36) / (64.0 - 36.0) * 100.0);
         weakProgressBar->setProperty("value", QVariant(100));
         mediumProgressBar->setProperty("value", QVariant(value));
         strongProgressBar->setProperty("value", QVariant(0));
         generator->opt.entropy = Generator::MEDIUM;
     } else {
-        int value = static_cast<int>((entropy - 65) / (128.0 - 65.0) * 100.0);
+        double value = ((entropy - 65) / (128.0 - 65.0) * 100.0);
         weakProgressBar->setProperty("value", QVariant(100));
         mediumProgressBar->setProperty("value", QVariant(100));
         strongProgressBar->setProperty("value", QVariant(value));

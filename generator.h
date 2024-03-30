@@ -28,7 +28,8 @@ public:
     explicit Generator(QObject *parent = nullptr);
 
     Q_INVOKABLE QString generatePassword(int length);
-    inline int getPasswordEntropy(int length, int poolSize);
+    inline double getPasswordEntropy(const std::string& password, int poolSize);
+    inline double getEffectiveLength(int reps);
     Q_INVOKABLE void copy(const QString& text) const;
     Q_INVOKABLE bool isWeakPassword() { return (opt.entropy == WEAK); }
 
@@ -81,7 +82,7 @@ private:
 
 signals:
     void passwordGenerated(QString password);
-    void entropyCalculated(int entropy);
+    void entropyCalculated(double entropy);
 
 public slots:
     inline void onLowerChanged(bool checked)  { opt.lower = checked; }

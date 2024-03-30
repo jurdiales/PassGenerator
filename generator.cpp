@@ -1,8 +1,8 @@
 #include "generator.h"
 
-// #include <iostream>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 
 Generator::Options Generator::opt;
 
@@ -42,18 +42,52 @@ QString Generator::generatePassword(int length)
         password += generators[QRandomGenerator::global()->bounded(0, nGeneratons)]();
     }
 
-    emit entropyCalculated( getPasswordEntropy(length, poolSize) );
+    emit entropyCalculated( getPasswordEntropy(password, poolSize) );
     emit passwordGenerated(QString::fromStdString(password));
     return QString::fromStdString(password);
 }
 
-int Generator::getPasswordEntropy(int length, int poolSize)
+double Generator::getPasswordEntropy(const std::string &password, int poolSize)
 {
+    double effective_length = 0.;
+    // decrease entropy if there are repeated numbers or letters
+    int repeated = 0;
+    for (std::size_t i = 0; i < password.length(); ++i) {
+        // count for repetitions of character i
+        int ireps = 0;
+        for (std::size_t j = i + 1; j < password.length(); ++j) {
+            // special characters not count for this
+            auto beg = std::cbegin(SYMBOL_SET);
+            auto end = std::cend(SYMBOL_SET);
+            const int value = static_cast<int>(password[i]);
+            if ((std::find(beg, end, value) == end) && (password[i] == password[j])) {
+                ++repeated;
+                ++ireps;
+                continue;
+            }
+            // if the next is not repeated, there is no need to continue
+            break;
+        }
+        // to not count several times the same repeated characters
+        i += ireps;
+        (ireps == 0) ? effective_length += 1.0 : effective_length += getEffectiveLength(ireps);
+    }
 
     // E = log2(S^L)
     // Where S is the size of the pool of unique possible symbols (character set)
     // and L is the password length or number of symbols in the password
-    return (int)std::ceil(std::log2(std::pow(poolSize, length)));
+    return std::log2(std::pow((double)poolSize, effective_length));
+}
+
+double Generator::getEffectiveLength(int reps)
+{
+    if (reps == 0) return 1.0;
+
+    double effLength = 1.0;
+    for (unsigned int i = 1; i <= reps; ++i) {
+        effLength += 1.0 / (i + 1.0);
+    }
+    return effLength;
 }
 
 void Generator::copy(const QString &text) const
@@ -64,10 +98,9 @@ void Generator::copy(const QString &text) const
 void Generator::onTextEdited(const QString &text)
 {
     Options opt {false, false, false, false};
-    int length = text.size();
     int poolSize = 0;
 
-    for (auto c : text) {
+    for (const auto& c : text) {
         int ic = static_cast<int>(c.toLatin1());
         // is lower?
         if (!opt.lower) {
@@ -102,5 +135,5 @@ void Generator::onTextEdited(const QString &text)
         }
     }
 
-    emit entropyCalculated( getPasswordEntropy(length, poolSize) );
+    emit entropyCalculated( getPasswordEntropy(text.toStdString(), poolSize) );
 }

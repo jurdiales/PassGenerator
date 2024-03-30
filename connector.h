@@ -15,7 +15,7 @@ public:
 
 public slots:
     void setPasswordText(QString password);
-    void setEntropyBar(int entropy);
+    void setEntropyBar(double entropy);
 
 private:
     Generator* generator;
